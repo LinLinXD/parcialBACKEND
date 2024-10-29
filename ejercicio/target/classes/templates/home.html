@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Clases</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+<nav class="bg-white shadow-md">
+    <div class="max-w-screen-xl mx-auto px-4 py-3 flex justify-between items-center">
+        <h1 class="text-2xl font-semibold">Gestión Educativa</h1>
+        <div class="space-x-4">
+            <!-- Mostrar solo cuando NO está autenticado -->
+            <a sec:authorize="!isAuthenticated()"
+               href="/login"
+               class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                Iniciar Sesión
+            </a>
+
+            <!-- Mostrar solo cuando está autenticado -->
+            <div sec:authorize="isAuthenticated()" class="flex items-center space-x-4">
+                    <span class="text-gray-600">
+                        Bienvenido, <span sec:authentication="name"></span>
+                    </span>
+                <a href="/logout"
+                   class="inline-block px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
+                    Cerrar Sesión
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-screen-xl mx-auto p-4">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+        <!-- Tarjeta de Listar Clases -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold mb-4">Listar Clases</h2>
+            <p class="text-gray-600 mb-4">Visualiza todas las clases disponibles en el sistema.</p>
+            <a href="/clases"
+               class="block w-full bg-blue-600 text-white text-center px-4 py-2 rounded-lg hover:bg-blue-700">
+                Ver Clases
+            </a>
+        </div>
+
+        <!-- Tarjeta de Crear Clases (solo visible para RECTOR) -->
+        <div
+             class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold mb-4">Crear Nueva Clase</h2>
+            <p class="text-gray-600 mb-4">Crea y gestiona nuevas clases en el sistema.</p>
+            <a href="/clases/crear"
+               class="block w-full bg-green-600 text-white text-center px-4 py-2 rounded-lg hover:bg-green-700">
+                Crear Clase
+            </a>
+        </div>
+    </div>
+</main>
+</body>
+</html>

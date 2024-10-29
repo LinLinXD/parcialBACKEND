@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Clase - Sistema de Gestión Educativa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-8">
+<div class="max-w-md mx-auto">
+    <!-- Encabezado -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Editar Clase</h1>
+        <p class="text-gray-600 mt-2">Modifica los datos de la clase</p>
+    </div>
+
+    <!-- Mensajes de error -->
+    <div th:if="${error}" class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg" th:text="${error}">
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md overflow-hidden p-6">
+        <form th:action="@{/clases/editar/{id}(id=${claseId})}"
+              th:object="${claseDTO}"
+              method="POST"
+              class="space-y-6">
+
+            <!-- Campos solo visibles para RECTOR -->
+            <div sec:authorize="hasRole('RECTOR')">
+                <div>
+                    <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre de la clase</label>
+                    <input type="text"
+                           id="nombre"
+                           th:field="*{nombre}"
+                           maxlength="20"
+                           required
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                </div>
+
+                <div>
+                    <label for="docente" class="block text-sm font-medium text-gray-700">Docente</label>
+                    <input type="text"
+                           id="docente"
+                           th:field="*{docente}"
+                           maxlength="100"
+                           required
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                </div>
+
+                <div>
+                    <label for="salon" class="block text-sm font-medium text-gray-700">Salón de clase</label>
+                    <input type="text"
+                           id="salon"
+                           th:field="*{salon}"
+                           required
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                </div>
+
+                <div>
+                    <label for="estado" class="block text-sm font-medium text-gray-700">Estado de clase</label>
+                    <select id="estado"
+                            th:field="*{estado}"
+                            required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                        <option value="PROGRAMADA">Programada</option>
+                        <option value="EN_CURSO">En Curso</option>
+                        <option value="CANCELADA">Cancelada</option>
+                        <option value="APLAZADA">Aplazada</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Campos visibles para DOCENTE y RECTOR -->
+            <div>
+                <!-- Si es DOCENTE, mostrar solo vista de los campos no editables -->
+                <div sec:authorize="hasRole('DOCENTE')">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Nombre de la clase</label>
+                        <p class="mt-1 p-2 block w-full rounded-md bg-gray-50" th:text="*{nombre}"></p>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Docente</label>
+                        <p class="mt-1 p-2 block w-full rounded-md bg-gray-50" th:text="*{docente}"></p>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Salón</label>
+                        <p class="mt-1 p-2 block w-full rounded-md bg-gray-50" th:text="*{salon}"></p>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Estado</label>
+                        <p class="mt-1 p-2 block w-full rounded-md bg-gray-50" th:text="*{estado}"></p>
+                    </div>
+                </div>
+
+                <!-- Campos de horario editables para ambos roles -->
+                <div>
+                    <label for="horarioInicio" class="block text-sm font-medium text-gray-700">Horario de Inicio</label>
+                    <input type="number"
+                           id="horarioInicio"
+                           th:field="*{horarioInicio}"
+                           required
+                           min="0"
+                           max="23"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                    <span class="text-sm text-gray-500">Hora en formato 24 horas (0-23)</span>
+                </div>
+
+                <div>
+                    <label for="horarioFinal" class="block text-sm font-medium text-gray-700">Horario Final</label>
+                    <input type="number"
+                           id="horarioFinal"
+                           th:field="*{horarioFinal}"
+                           required
+                           min="1"
+                           max="24"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                    <span class="text-sm text-gray-500">Hora en formato 24 horas (1-24)</span>
+                </div>
+            </div>
+
+            <div class="flex justify-between pt-4">
+                <button type="submit"
+                        class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                    Guardar Cambios
+                </button>
+                <a th:href="@{/clases}"
+                   class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
